@@ -3,6 +3,9 @@ const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const bookRoutes = require("./routes/bookRotes");
 const Book = require("./models/Book");
+const dns = require("node:dns");
+
+dns.setServers(["1.1.1.1", "8.8.8.8"]);
 
 dotenv.config();
 const app = express();
@@ -19,17 +22,15 @@ app.get("/", async (req, res) => {
     const books = await Book.find();
     res.render("index", { books: books, error: null, editingBook: undefined });
   } catch (error) {
-    res
-      .status(500)
-      .render("index", {
-        books: [],
-        error: "Error loading books.",
-        editingBook: undefined,
-      });
+    res.status(500).render("index", {
+      books: [],
+      error: "Error loading books.",
+      editingBook: undefined,
+    });
   }
 });
 
-// edit book ui 
+// edit book ui
 app.get("/edit-ui/:id", async (req, res) => {
   try {
     const books = await Book.find();
@@ -44,7 +45,7 @@ app.get("/edit-ui/:id", async (req, res) => {
   }
 });
 
-// add book 
+// add book
 app.post("/add-book", async (req, res) => {
   try {
     const newBook = new Book({
@@ -56,16 +57,13 @@ app.post("/add-book", async (req, res) => {
     res.redirect("/");
   } catch (error) {
     const books = await Book.find();
-    res
-      .status(400)
-      .render("index", {
-        books: books,
-        error: "Error saving book. Please check your input.",
-        editingBook: undefined,
-      });
+    res.status(400).render("index", {
+      books: books,
+      error: "Error saving book. Please check your input.",
+      editingBook: undefined,
+    });
   }
 });
-
 
 // edit book by id
 app.post("/edit-book/:id", async (req, res) => {
@@ -82,13 +80,11 @@ app.post("/edit-book/:id", async (req, res) => {
     res.redirect("/");
   } catch (error) {
     const books = await Book.find();
-    res
-      .status(400)
-      .render("index", {
-        books: books,
-        error: "Error updating book.",
-        editingBook: undefined,
-      });
+    res.status(400).render("index", {
+      books: books,
+      error: "Error updating book.",
+      editingBook: undefined,
+    });
   }
 });
 
@@ -99,13 +95,11 @@ app.post("/delete-book/:id", async (req, res) => {
     res.redirect("/");
   } catch (error) {
     const books = await Book.find();
-    res
-      .status(400)
-      .render("index", {
-        books: books,
-        error: "Error deleting book.",
-        editingBook: undefined,
-      });
+    res.status(400).render("index", {
+      books: books,
+      error: "Error deleting book.",
+      editingBook: undefined,
+    });
   }
 });
 
